@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+
 namespace SiteReviews.Models
 {
     public class Reviews
     {
+        [Key]
         public int Id { get; set; }
 
         public string Conteúdo { get; set; }
