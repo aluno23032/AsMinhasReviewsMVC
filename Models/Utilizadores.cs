@@ -1,7 +1,10 @@
-﻿namespace SiteReviews.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SiteReviews.Models
 {
     public class Utilizadores
     {
+        [Key]
         public int Id { get; set; }
 
         public string NomeUtilizador { get; set; }
