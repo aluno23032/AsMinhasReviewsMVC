@@ -12,7 +12,5 @@ namespace SiteReviews.Models
         public string Email { get; set; }
 
         public DateTime DataNascimento { get; set; }
-
-        public string Fotografia { get; set; }
     }
 }
