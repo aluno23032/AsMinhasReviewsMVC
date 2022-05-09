@@ -2,7 +2,7 @@
 
 namespace SiteReviews.Models
 {
-    public class Objeto
+    public class Objetos
     {
         [Key]
         public int Id { get; set; }

@@ -2,10 +2,8 @@
 
 namespace SiteReviews.Models
 {
-    public class Filmes
+    public class Filmes : Objetos
     {
-        [Key]
-        public int Id { get; set; }
 
         public string Diretor { get; set; }
 
