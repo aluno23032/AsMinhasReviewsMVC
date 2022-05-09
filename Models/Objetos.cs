@@ -9,6 +9,8 @@ namespace SiteReviews.Models
 
         public string Nome { get; set; }
 
+        public string Fotografia { get; set; }
+
         public string Plataforma { get; set; }
 
         public DateTime DataLancamento { get; set; }
