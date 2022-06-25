@@ -10,85 +10,100 @@ using SiteReviews.Models;
 
 namespace SiteReviews.Controllers
 {
-    public class FilmesController : Controller
+    public class AdministradoresController : Controller
     {
         private readonly SiteReviewsContext _context;
 
-        public FilmesController(SiteReviewsContext context)
+        public AdministradoresController(SiteReviewsContext context)
         {
             _context = context;
         }
 
-        // GET: Filmes
+        // GET: Administradores
         public async Task<IActionResult> Index()
         {
-              return View(await _context.Filmes.ToListAsync());
+              return View(await _context.Administradores.ToListAsync());
         }
 
-        // GET: Filmes/Details/5
+        // GET: Administradores/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Filmes == null)
+            if (id == null || _context.Administradores == null)
             {
                 return NotFound();
             }
 
-            var filmes = await _context.Filmes
+            var administradores = await _context.Administradores
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (filmes == null)
+            if (administradores == null)
             {
                 return NotFound();
             }
 
-            return View(filmes);
+            return View(administradores);
         }
 
-        // GET: Filmes/Create
+        // GET: Administradores/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Filmes/Create
+        // POST: Administradores/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Diretor,Atores,Id,Nome,Fotografia,Plataforma,DataLancamento,Descricao")] Filmes filmes)
+        public async Task<IActionResult> Create([Bind("Id,NomeUtilizador,Email,DataNascimento,Fotografia")] Administradores administradores, IFormFile fotoAdmin)
         {
+            if (fotoAdmin == null)
+            {
+                administradores.Fotografia = "noAdmin.png";
+            }
+            else
+            {
+                if (!(fotoAdmin.ContentType == "image/png" || fotoAdmin.ContentType == "image/jpeg"))
+                {
+                    ModelState.AddModelError("", "Por favor, adicione um ficheiro .png ou .jpg");
+                    return View(administradores);
+                }
+                else
+                {
+                }
+            }
             if (ModelState.IsValid)
             {
-                _context.Add(filmes);
+                _context.Add(administradores);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(filmes);
+            return View(administradores);
         }
 
-        // GET: Filmes/Edit/5
+        // GET: Administradores/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Filmes == null)
+            if (id == null || _context.Administradores == null)
             {
                 return NotFound();
             }
 
-            var filmes = await _context.Filmes.FindAsync(id);
-            if (filmes == null)
+            var administradores = await _context.Administradores.FindAsync(id);
+            if (administradores == null)
             {
                 return NotFound();
             }
-            return View(filmes);
+            return View(administradores);
         }
 
-        // POST: Filmes/Edit/5
+        // POST: Administradores/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Diretor,Atores,Id,Nome,Fotografia,Plataforma,DataLancamento,Descricao")] Filmes filmes)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,NomeUtilizador,Email,DataNascimento,Fotografia")] Administradores administradores)
         {
-            if (id != filmes.Id)
+            if (id != administradores.Id)
             {
                 return NotFound();
             }
@@ -97,12 +112,12 @@ namespace SiteReviews.Controllers
             {
                 try
                 {
-                    _context.Update(filmes);
+                    _context.Update(administradores);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!FilmesExists(filmes.Id))
+                    if (!AdministradoresExists(administradores.Id))
                     {
                         return NotFound();
                     }
@@ -113,49 +128,49 @@ namespace SiteReviews.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(filmes);
+            return View(administradores);
         }
 
-        // GET: Filmes/Delete/5
+        // GET: Administradores/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Filmes == null)
+            if (id == null || _context.Administradores == null)
             {
                 return NotFound();
             }
 
-            var filmes = await _context.Filmes
+            var administradores = await _context.Administradores
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (filmes == null)
+            if (administradores == null)
             {
                 return NotFound();
             }
 
-            return View(filmes);
+            return View(administradores);
         }
 
-        // POST: Filmes/Delete/5
+        // POST: Administradores/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Filmes == null)
+            if (_context.Administradores == null)
             {
-                return Problem("Entity set 'SiteReviewsContext.Filmes'  is null.");
+                return Problem("Entity set 'SiteReviewsContext.Administradores'  is null.");
             }
-            var filmes = await _context.Filmes.FindAsync(id);
-            if (filmes != null)
+            var administradores = await _context.Administradores.FindAsync(id);
+            if (administradores != null)
             {
-                _context.Filmes.Remove(filmes);
+                _context.Administradores.Remove(administradores);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool FilmesExists(int id)
+        private bool AdministradoresExists(int id)
         {
-          return _context.Filmes.Any(e => e.Id == id);
+          return _context.Administradores.Any(e => e.Id == id);
         }
     }
 }

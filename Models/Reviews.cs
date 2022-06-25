@@ -8,16 +8,25 @@ namespace SiteReviews.Models
         [Key]
         public int Id { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}",
+                     ApplyFormatInEditMode = true)]
+        [DataType(DataType.Date)]
+        public DateTime DataCriacao { get; set; }
+
+        [Required(ErrorMessage = "Escreva a sua review")]
         public string Conteudo { get; set; }
 
-        [ForeignKey(nameof(IdUtilizador))]
-        public int CriadorFK { get; set; }
-        public Utilizadores IdUtilizador { get; set; }
-
+        [Required(ErrorMessage = "Indique um rating")]
+        [RegularExpression("[0-9]", ErrorMessage = "Selecione um valor")]
+        [Range(1, 10)]
         public int Rating { get; set; }
 
-        [ForeignKey(nameof(IdObjeto))]
-        public int IdObjetoFK { get; set; }
-        public Series IdObjeto { get; set; }
+        [ForeignKey(nameof(Utilizador))]
+        public int CriadorFK { get; set; }
+        public Utilizadores Utilizador { get; set; }
+
+        [ForeignKey(nameof(Objeto))]
+        public int ObjetoFK { get; set; }
+        public Series Objeto { get; set; }
     }
 }

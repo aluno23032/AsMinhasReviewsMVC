@@ -14,9 +14,14 @@ namespace SiteReviews.Controllers
     {
         private readonly SiteReviewsContext _context;
 
-        public UtilizadoresController(SiteReviewsContext context)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
+        public UtilizadoresController(
+           SiteReviewsContext context,
+           IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         // GET: Utilizadores
@@ -54,12 +59,51 @@ namespace SiteReviews.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,NomeUtilizador,Email,DataNascimento")] Utilizadores utilizadores)
-        {
+        public async Task<IActionResult> Create([Bind("Id,NomeUtilizador,Email,DataNascimento,Fotografia,UserID,admin")] Utilizadores utilizadores, IFormFile fotoUser)
+        {                
+                if (fotoUser == null)
+                {
+                    utilizadores.Fotografia = "noUser.png";
+                }
+                else
+                {
+                    if (!(fotoUser.ContentType == "image/png" || fotoUser.ContentType == "image/jpeg"))
+                    {
+                        ModelState.AddModelError("", "Por favor, adicione um ficheiro .png ou .jpg");
+                        return View(utilizadores);
+                    }
+                    else {
+                        Guid g = Guid.NewGuid();
+                        string nomeFoto = utilizadores.Id + "_" + g.ToString();
+                        string extensaoFoto = Path.GetExtension(fotoUser.FileName).ToLower();
+                        nomeFoto += extensaoFoto;
+                        utilizadores.Fotografia = nomeFoto;
+                }
+                }
             if (ModelState.IsValid)
             {
-                _context.Add(utilizadores);
-                await _context.SaveChangesAsync();
+                try
+                {
+                    _context.Add(utilizadores);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception)
+                {
+                    ModelState.AddModelError("", "Ocorreu um erro com a operação de guardar os dados do utilizador " + utilizadores.NomeUtilizador);
+                    return View(utilizadores);
+                }
+                if (fotoUser != null)
+                {
+                    string nomeLocalizacaoFicheiro = _webHostEnvironment.WebRootPath;
+                    nomeLocalizacaoFicheiro = Path.Combine(nomeLocalizacaoFicheiro, "Fotos");
+                    if (!Directory.Exists(nomeLocalizacaoFicheiro))
+                    {
+                        Directory.CreateDirectory(nomeLocalizacaoFicheiro);
+                    }
+                    string nomeDaFoto = Path.Combine(nomeLocalizacaoFicheiro, utilizadores.Fotografia);
+                    using var stream = new FileStream(nomeDaFoto, FileMode.Create);
+                    await fotoUser.CopyToAsync(stream);
+                }
                 return RedirectToAction(nameof(Index));
             }
             return View(utilizadores);
@@ -86,7 +130,7 @@ namespace SiteReviews.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,NomeUtilizador,Email,DataNascimento")] Utilizadores utilizadores)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,NomeUtilizador,Email,DataNascimento,Fotografia,UserID")] Utilizadores utilizadores)
         {
             if (id != utilizadores.Id)
             {
@@ -139,16 +183,8 @@ namespace SiteReviews.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Utilizadores == null)
-            {
-                return Problem("Entity set 'SiteReviewsContext.Utilizadores'  is null.");
-            }
-            var utilizadores = await _context.Utilizadores.FindAsync(id);
-            if (utilizadores != null)
-            {
-                _context.Utilizadores.Remove(utilizadores);
-            }
-            
+            var veterinario = await _context.Utilizadores.FindAsync(id);
+            _context.Utilizadores.Remove(veterinario);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

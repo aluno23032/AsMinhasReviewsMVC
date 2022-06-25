@@ -3,13 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SiteReviews.Models
 {
-    public class Utilizadores
+    public class Administradores
     {
-        public Utilizadores()
-        {
-            ListaReviews = new HashSet<Reviews>();
-        }
-
         [Key]
         public int Id { get; set; }
 
@@ -19,7 +14,7 @@ namespace SiteReviews.Models
         public string NomeUtilizador { get; set; }
 
         [Required(ErrorMessage = "O {0} é de preenchimento obrigatório.")]
-        [StringLength(64, ErrorMessage = "O email não pode ter mais do que {1} caracteres.", MinimumLength = 8)]
+        [StringLength(64, ErrorMessage = "O nome de utilizador não pode ter mais do que {1} caracteres.", MinimumLength = 8)]
         [EmailAddress(ErrorMessage = "Só são aceites endereços de email válidos.")]
         public string Email { get; set; }
 
@@ -27,11 +22,5 @@ namespace SiteReviews.Models
         public DateTime DataNascimento { get; set; }
 
         public string Fotografia { get; set; }
-
-        public ICollection<Reviews> ListaReviews { get; set; }
-
-        public string UserID { get; set; }
-
-        public Boolean admin { get; set; }
     }
 }

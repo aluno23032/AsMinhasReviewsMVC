@@ -4,6 +4,12 @@ namespace SiteReviews.Models
 {
     public class Objetos
     {
+        public Objetos()
+        {
+            ListaReviews = new HashSet<Reviews>();
+            ListaFotografias = new HashSet<Fotografias>();
+        }
+
         [Key]
         public int Id { get; set; }
 
@@ -18,5 +24,7 @@ namespace SiteReviews.Models
         public string Descricao { get; set; }
 
         public ICollection<Reviews> ListaReviews { get; set; }
+
+        public ICollection<Fotografias> ListaFotografias { get; set; }
     }
 }

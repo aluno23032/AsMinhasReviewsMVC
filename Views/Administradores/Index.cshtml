@@ -1,7 +1,8 @@
-﻿@model IEnumerable<SiteReviews.Models.Reviews>
+﻿@model IEnumerable<SiteReviews.Models.Administradores>
 
 @{
     ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>Index</h1>
@@ -13,16 +14,16 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Conteudo)
+                @Html.DisplayNameFor(model => model.NomeUtilizador)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IdUtilizador)
+                @Html.DisplayNameFor(model => model.Email)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Rating)
+                @Html.DisplayNameFor(model => model.DataNascimento)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IdObjeto)
+                @Html.DisplayNameFor(model => model.Fotografia)
             </th>
             <th></th>
         </tr>
@@ -31,16 +32,16 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Conteudo)
+                @Html.DisplayFor(modelItem => item.NomeUtilizador)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IdUtilizador.Id)
+                @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Rating)
+                @Html.DisplayFor(modelItem => item.DataNascimento)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IdObjeto.Id)
+                @Html.DisplayFor(modelItem => item.Fotografia)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

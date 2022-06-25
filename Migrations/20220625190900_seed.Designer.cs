@@ -12,8 +12,8 @@ using SiteReviews.Data;
 namespace SiteReviews.Migrations
 {
     [DbContext(typeof(SiteReviewsContext))]
-    [Migration("20220625004920_migracao")]
-    partial class migracao
+    [Migration("20220625190900_seed")]
+    partial class seed
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,6 +23,35 @@ namespace SiteReviews.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("SiteReviews.Models.Administradores", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("DataNascimento")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("Fotografia")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NomeUtilizador")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Administradores");
+                });
 
             modelBuilder.Entity("SiteReviews.Models.Fotografias", b =>
                 {
@@ -35,12 +64,12 @@ namespace SiteReviews.Migrations
                     b.Property<string>("Fotografia")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UtilizadorFK")
+                    b.Property<int?>("ObjetosId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UtilizadorFK");
+                    b.HasIndex("ObjetosId");
 
                     b.ToTable("Fotografias");
                 });
@@ -88,18 +117,22 @@ namespace SiteReviews.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Conteudo")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CriadorFK")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("DataCriacao")
+                        .HasColumnType("datetime2");
+
                     b.Property<int?>("FilmesId")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdObjetoFK")
+                    b.Property<int?>("JogosId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("JogosId")
+                    b.Property<int>("ObjetoFK")
                         .HasColumnType("int");
 
                     b.Property<int>("Rating")
@@ -111,9 +144,9 @@ namespace SiteReviews.Migrations
 
                     b.HasIndex("FilmesId");
 
-                    b.HasIndex("IdObjetoFK");
-
                     b.HasIndex("JogosId");
+
+                    b.HasIndex("ObjetoFK");
 
                     b.ToTable("Reviews");
                 });
@@ -130,14 +163,50 @@ namespace SiteReviews.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("Fotografia")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NomeUtilizador")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.Property<string>("UserID")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Utilizadores");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DataNascimento = new DateTime(2012, 12, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "josesilva5@gmail.com",
+                            Fotografia = "Jose.jpg",
+                            NomeUtilizador = "josesilva"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            DataNascimento = new DateTime(2004, 10, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "mariasantos1@gmail.com",
+                            Fotografia = "Maria.jpg",
+                            NomeUtilizador = "mariasantos"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            DataNascimento = new DateTime(2007, 1, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "ricardosousa8@gmail.com",
+                            Fotografia = "Ricardo.jpg",
+                            NomeUtilizador = "ricardosousa"
+                        });
                 });
 
             modelBuilder.Entity("SiteReviews.Models.Filmes", b =>
@@ -186,19 +255,15 @@ namespace SiteReviews.Migrations
 
             modelBuilder.Entity("SiteReviews.Models.Fotografias", b =>
                 {
-                    b.HasOne("SiteReviews.Models.Utilizadores", "IdUtilizador")
-                        .WithMany()
-                        .HasForeignKey("UtilizadorFK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("IdUtilizador");
+                    b.HasOne("SiteReviews.Models.Objetos", null)
+                        .WithMany("ListaFotografias")
+                        .HasForeignKey("ObjetosId");
                 });
 
             modelBuilder.Entity("SiteReviews.Models.Reviews", b =>
                 {
-                    b.HasOne("SiteReviews.Models.Utilizadores", "IdUtilizador")
-                        .WithMany()
+                    b.HasOne("SiteReviews.Models.Utilizadores", "Utilizador")
+                        .WithMany("ListaReviews")
                         .HasForeignKey("CriadorFK")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -207,19 +272,29 @@ namespace SiteReviews.Migrations
                         .WithMany("ListaReviews")
                         .HasForeignKey("FilmesId");
 
-                    b.HasOne("SiteReviews.Models.Series", "IdObjeto")
-                        .WithMany("ListaReviews")
-                        .HasForeignKey("IdObjetoFK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SiteReviews.Models.Jogos", null)
                         .WithMany("ListaReviews")
                         .HasForeignKey("JogosId");
 
-                    b.Navigation("IdObjeto");
+                    b.HasOne("SiteReviews.Models.Series", "Objeto")
+                        .WithMany("ListaReviews")
+                        .HasForeignKey("ObjetoFK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("IdUtilizador");
+                    b.Navigation("Objeto");
+
+                    b.Navigation("Utilizador");
+                });
+
+            modelBuilder.Entity("SiteReviews.Models.Objetos", b =>
+                {
+                    b.Navigation("ListaFotografias");
+                });
+
+            modelBuilder.Entity("SiteReviews.Models.Utilizadores", b =>
+                {
+                    b.Navigation("ListaReviews");
                 });
 
             modelBuilder.Entity("SiteReviews.Models.Filmes", b =>

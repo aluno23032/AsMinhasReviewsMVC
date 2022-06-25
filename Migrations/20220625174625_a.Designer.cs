@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SiteReviews.Data;
 
@@ -11,9 +12,10 @@ using SiteReviews.Data;
 namespace SiteReviews.Migrations
 {
     [DbContext(typeof(SiteReviewsContext))]
-    partial class SiteReviewsContextModelSnapshot : ModelSnapshot
+    [Migration("20220625174625_a")]
+    partial class a
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -179,32 +181,6 @@ namespace SiteReviews.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Utilizadores");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            DataNascimento = new DateTime(2012, 12, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "josesilva5@gmail.com",
-                            Fotografia = "Jose.jpg",
-                            NomeUtilizador = "josesilva"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            DataNascimento = new DateTime(2004, 10, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "mariasantos1@gmail.com",
-                            Fotografia = "Maria.jpg",
-                            NomeUtilizador = "mariasantos"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            DataNascimento = new DateTime(2007, 1, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "ricardosousa8@gmail.com",
-                            Fotografia = "Ricardo.jpg",
-                            NomeUtilizador = "ricardosousa"
-                        });
                 });
 
             modelBuilder.Entity("SiteReviews.Models.Filmes", b =>
