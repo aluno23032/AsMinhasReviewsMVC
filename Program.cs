@@ -1,4 +1,9 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using SiteReviews.Data;
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<SiteReviewsContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SiteReviewsContext") ?? throw new InvalidOperationException("Connection string 'SiteReviewsContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

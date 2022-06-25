@@ -1,6 +1,6 @@
 ﻿namespace SiteReviews.Models
 {
-    public class Series
+    public class Series : Objetos
     {
         public int NTemporadas { get; set; }
 

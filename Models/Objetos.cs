@@ -17,6 +17,6 @@ namespace SiteReviews.Models
 
         public string Descricao { get; set; }
 
-        public ICollection<Reviews> Reviews { get; set; }
+        public ICollection<Reviews> ListaReviews { get; set; }
     }
 }
