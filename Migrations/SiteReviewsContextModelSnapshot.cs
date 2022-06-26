@@ -22,35 +22,6 @@ namespace SiteReviews.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("SiteReviews.Models.Administradores", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("DataNascimento")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.Property<string>("Fotografia")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NomeUtilizador")
-                        .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("nvarchar(32)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Administradores");
-                });
-
             modelBuilder.Entity("SiteReviews.Models.Fotografias", b =>
                 {
                     b.Property<int>("Id")
@@ -80,6 +51,9 @@ namespace SiteReviews.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("Capa")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("DataLancamento")
                         .HasColumnType("datetime2");
 
@@ -88,9 +62,6 @@ namespace SiteReviews.Migrations
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Fotografia")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nome")
@@ -147,6 +118,17 @@ namespace SiteReviews.Migrations
                     b.HasIndex("ObjetoFK");
 
                     b.ToTable("Reviews");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Conteudo = "When you finish the show you'll never be the same..I guarantee you",
+                            CriadorFK = 1,
+                            DataCriacao = new DateTime(2022, 6, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ObjetoFK = 1,
+                            Rating = 10
+                        });
                 });
 
             modelBuilder.Entity("SiteReviews.Models.Utilizadores", b =>
@@ -176,6 +158,9 @@ namespace SiteReviews.Migrations
                     b.Property<string>("UserID")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("admin")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.ToTable("Utilizadores");
@@ -186,8 +171,9 @@ namespace SiteReviews.Migrations
                             Id = 1,
                             DataNascimento = new DateTime(2012, 12, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "josesilva5@gmail.com",
-                            Fotografia = "Jose.jpg",
-                            NomeUtilizador = "josesilva"
+                            Fotografia = "Jose.png",
+                            NomeUtilizador = "josesilva",
+                            admin = false
                         },
                         new
                         {
@@ -195,7 +181,8 @@ namespace SiteReviews.Migrations
                             DataNascimento = new DateTime(2004, 10, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "mariasantos1@gmail.com",
                             Fotografia = "Maria.jpg",
-                            NomeUtilizador = "mariasantos"
+                            NomeUtilizador = "mariasantos",
+                            admin = false
                         },
                         new
                         {
@@ -203,7 +190,8 @@ namespace SiteReviews.Migrations
                             DataNascimento = new DateTime(2007, 1, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "ricardosousa8@gmail.com",
                             Fotografia = "Ricardo.jpg",
-                            NomeUtilizador = "ricardosousa"
+                            NomeUtilizador = "ricardosousa",
+                            admin = false
                         });
                 });
 
@@ -249,6 +237,19 @@ namespace SiteReviews.Migrations
                         .HasColumnType("int");
 
                     b.HasDiscriminator().HasValue("Series");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Capa = "breakingbad.jpg",
+                            DataLancamento = new DateTime(2008, 1, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Descricao = "A high school chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine in order to secure his family's future.",
+                            Nome = "Breaking Bad",
+                            Plataforma = "Netflix",
+                            NEpisodios = 0,
+                            NTemporadas = 0
+                        });
                 });
 
             modelBuilder.Entity("SiteReviews.Models.Fotografias", b =>

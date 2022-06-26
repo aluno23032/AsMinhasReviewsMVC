@@ -16,9 +16,7 @@ namespace SiteReviews.Controllers
 
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public UtilizadoresController(
-           SiteReviewsContext context,
-           IWebHostEnvironment webHostEnvironment)
+        public UtilizadoresController(SiteReviewsContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
@@ -59,38 +57,38 @@ namespace SiteReviews.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,NomeUtilizador,Email,DataNascimento,Fotografia,UserID,admin")] Utilizadores utilizadores, IFormFile fotoUser)
+        public async Task<IActionResult> Create([Bind("Id,NomeUtilizador,Email,DataNascimento,Fotografia,UserID,admin")] Utilizadores utilizador, IFormFile fotoUser)
         {                
                 if (fotoUser == null)
                 {
-                    utilizadores.Fotografia = "noUser.png";
+                    utilizador.Fotografia = "noUser.png";
                 }
                 else
                 {
                     if (!(fotoUser.ContentType == "image/png" || fotoUser.ContentType == "image/jpeg"))
                     {
                         ModelState.AddModelError("", "Por favor, adicione um ficheiro .png ou .jpg");
-                        return View(utilizadores);
+                        return View(utilizador);
                     }
                     else {
                         Guid g = Guid.NewGuid();
-                        string nomeFoto = utilizadores.Id + "_" + g.ToString();
+                        string nomeFoto = utilizador.NomeUtilizador + "_" + g.ToString();
                         string extensaoFoto = Path.GetExtension(fotoUser.FileName).ToLower();
                         nomeFoto += extensaoFoto;
-                        utilizadores.Fotografia = nomeFoto;
+                        utilizador.Fotografia = nomeFoto;
                 }
                 }
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Add(utilizadores);
+                    _context.Add(utilizador);
                     await _context.SaveChangesAsync();
                 }
                 catch (Exception)
                 {
-                    ModelState.AddModelError("", "Ocorreu um erro com a operação de guardar os dados do utilizador " + utilizadores.NomeUtilizador);
-                    return View(utilizadores);
+                    ModelState.AddModelError("", "Ocorreu um erro com a operação de guardar os dados do utilizador " + utilizador.NomeUtilizador);
+                    return View(utilizador);
                 }
                 if (fotoUser != null)
                 {
@@ -100,13 +98,13 @@ namespace SiteReviews.Controllers
                     {
                         Directory.CreateDirectory(nomeLocalizacaoFicheiro);
                     }
-                    string nomeDaFoto = Path.Combine(nomeLocalizacaoFicheiro, utilizadores.Fotografia);
+                    string nomeDaFoto = Path.Combine(nomeLocalizacaoFicheiro, utilizador.Fotografia);
                     using var stream = new FileStream(nomeDaFoto, FileMode.Create);
                     await fotoUser.CopyToAsync(stream);
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(utilizadores);
+            return View(utilizador);
         }
 
         // GET: Utilizadores/Edit/5
@@ -130,9 +128,9 @@ namespace SiteReviews.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,NomeUtilizador,Email,DataNascimento,Fotografia,UserID")] Utilizadores utilizadores)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,NomeUtilizador,Email,DataNascimento,Fotografia,UserID")] Utilizadores utilizador, IFormFile fotoVet)
         {
-            if (id != utilizadores.Id)
+            if (id != utilizador.Id)
             {
                 return NotFound();
             }
@@ -141,12 +139,12 @@ namespace SiteReviews.Controllers
             {
                 try
                 {
-                    _context.Update(utilizadores);
+                    _context.Update(utilizador);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UtilizadoresExists(utilizadores.Id))
+                    if (!UtilizadoresExists(utilizador.Id))
                     {
                         return NotFound();
                     }
@@ -157,7 +155,7 @@ namespace SiteReviews.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(utilizadores);
+            return View(utilizador);
         }
 
         // GET: Utilizadores/Delete/5
@@ -183,9 +181,15 @@ namespace SiteReviews.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var veterinario = await _context.Utilizadores.FindAsync(id);
-            _context.Utilizadores.Remove(veterinario);
-            await _context.SaveChangesAsync();
+            try
+            {
+                var utilizador = await _context.Utilizadores.FindAsync(id);
+                _context.Utilizadores.Remove(utilizador);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+            }
             return RedirectToAction(nameof(Index));
         }
 

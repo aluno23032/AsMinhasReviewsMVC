@@ -32,6 +32,6 @@ namespace SiteReviews.Models
 
         public string UserID { get; set; }
 
-        public Boolean admin { get; set; }
+        public Boolean admin { get; set; } = false;
     }
 }

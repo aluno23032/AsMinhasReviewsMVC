@@ -25,7 +25,7 @@ namespace SiteReviews.Data
                    NomeUtilizador= "josesilva",
                    Email = "josesilva5@gmail.com",
                    DataNascimento = new DateTime(2012, 12, 25),
-                   Fotografia = "Jose.jpg"
+                   Fotografia = "Jose.png"
                },
                new Utilizadores()
                {
@@ -44,6 +44,18 @@ namespace SiteReviews.Data
                    Fotografia = "Ricardo.jpg"
                }
             );
+            modelBuilder.Entity<Series>().HasData(
+                new Series { Id = 1, Nome = "Breaking Bad", Capa = "breakingbad.jpg", Plataforma = "Netflix", DataLancamento = new DateTime(2008, 1, 20), 
+                    Descricao = "A high school chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine in order to secure his family's future.",
+                ListaReviews = new List<Reviews>(), ListaFotografias = new List<Fotografias>()
+                }
+            );
+
+            modelBuilder.Entity<Reviews>().HasData(
+               new Reviews { Id = 1, DataCriacao = new DateTime(2022, 6, 26), Conteudo = "When you finish the show you'll never be the same..I guarantee you", 
+                   Rating = 10, CriadorFK = 1, ObjetoFK = 1}
+            );
+
         }
 
         public DbSet<SiteReviews.Models.Reviews> Reviews { get; set; }
@@ -59,7 +71,5 @@ namespace SiteReviews.Data
         public DbSet<SiteReviews.Models.Series> Series { get; set; }
 
         public DbSet<SiteReviews.Models.Utilizadores> Utilizadores { get; set; }
-
-        public DbSet<SiteReviews.Models.Administradores> Administradores { get; set; }
     }
 }

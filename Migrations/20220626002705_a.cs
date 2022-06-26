@@ -10,29 +10,13 @@ namespace SiteReviews.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Administradores",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    NomeUtilizador = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
-                    DataNascimento = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Fotografia = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Administradores", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Objetos",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nome = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Fotografia = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Capa = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Plataforma = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DataLancamento = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -60,7 +44,8 @@ namespace SiteReviews.Migrations
                     Email = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
                     DataNascimento = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Fotografia = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserID = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    UserID = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    admin = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -127,6 +112,26 @@ namespace SiteReviews.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Objetos",
+                columns: new[] { "Id", "Series_Atores", "Capa", "DataLancamento", "Descricao", "Series_Diretor", "Discriminator", "NEpisodios", "NTemporadas", "Nome", "Plataforma" },
+                values: new object[] { 1, null, "breakingbad.jpg", new DateTime(2008, 1, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), "A high school chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine in order to secure his family's future.", null, "Series", 0, 0, "Breaking Bad", "Netflix" });
+
+            migrationBuilder.InsertData(
+                table: "Utilizadores",
+                columns: new[] { "Id", "DataNascimento", "Email", "Fotografia", "NomeUtilizador", "UserID", "admin" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2012, 12, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), "josesilva5@gmail.com", "Jose.png", "josesilva", null, false },
+                    { 2, new DateTime(2004, 10, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), "mariasantos1@gmail.com", "Maria.jpg", "mariasantos", null, false },
+                    { 3, new DateTime(2007, 1, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), "ricardosousa8@gmail.com", "Ricardo.jpg", "ricardosousa", null, false }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Reviews",
+                columns: new[] { "Id", "Conteudo", "CriadorFK", "DataCriacao", "FilmesId", "JogosId", "ObjetoFK", "Rating" },
+                values: new object[] { 1, "When you finish the show you'll never be the same..I guarantee you", 1, new DateTime(2022, 6, 26, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, 1, 10 });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Fotografias_ObjetosId",
                 table: "Fotografias",
@@ -155,9 +160,6 @@ namespace SiteReviews.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Administradores");
-
             migrationBuilder.DropTable(
                 name: "Fotografias");
 
