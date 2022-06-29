@@ -19,12 +19,16 @@ namespace SiteReviews.Models
 
         public string Plataforma { get; set; }
 
+        [Display(Name = "Data de lançamento")]
         public DateTime DataLancamento { get; set; }
 
+        [Display(Name = "Descrição")]
         public string Descricao { get; set; }
 
+        [Display(Name = "Lista de reviews")]
         public ICollection<Reviews> ListaReviews { get; set; }
 
+        [Display(Name = "Lista de fotografias")]
         public ICollection<Fotografias> ListaFotografias { get; set; }
     }
 }

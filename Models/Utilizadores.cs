@@ -13,6 +13,7 @@ namespace SiteReviews.Models
         [Key]
         public int Id { get; set; }
 
+        [Display(Name = "Nome de Utilizador")]
         [Required(ErrorMessage = "O nome de utilizador é de preenchimento obrigatório.")]
         [StringLength(32, ErrorMessage = "O nome de utilizador não pode ter mais do que {1} caracteres.", MinimumLength = 8)]
         [RegularExpression("[A-ZÂÓÍa-záéíóúàèìòùâêîôûãõäëïöüñç '-]+", ErrorMessage = "No nome de utilizador só são aceites letras.")]
@@ -23,15 +24,19 @@ namespace SiteReviews.Models
         [EmailAddress(ErrorMessage = "Só são aceites endereços de email válidos.")]
         public string Email { get; set; }
 
+        [Display(Name = "Data de nascimento")]
+        [DataType(DataType.Date)]
         [Required(ErrorMessage = "A data de nascimento é de preenchimento obrigatório.")]
         public DateTime DataNascimento { get; set; }
 
         public string Fotografia { get; set; }
 
+        [Display(Name = "Lista de Reviews")]
         public ICollection<Reviews> ListaReviews { get; set; }
 
         public string UserID { get; set; }
 
+        [Display(Name = "Admin")]
         public Boolean admin { get; set; } = false;
     }
 }

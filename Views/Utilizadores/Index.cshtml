@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<SiteReviews.Models.Utilizadores>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Lista de utilizadores";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -26,7 +26,7 @@
                 @Html.DisplayNameFor(model => model.Fotografia)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UserID)
+                @Html.DisplayNameFor(model => model.admin)
             </th>
             <th></th>
         </tr>
@@ -44,15 +44,13 @@
                 @Html.DisplayFor(modelItem => item.DataNascimento)
             </td>
             <td>
-                <a href="~/Fotos/@item.Fotografia" target="_blank">
-                        <img src="~/Fotos/@Html.DisplayFor(modelItem => item.Fotografia)"
-                         alt="Foto do(a) veterinário(a) @item.NomeUtilizador"
-                         title="@item.NomeUtilizador"
-                         height="50" />
-                    </a>
+                <img src="~/Fotos/@Html.DisplayFor(modelItem => item.Fotografia)"
+                alt="Foto de @item.NomeUtilizador"
+                title="@item.NomeUtilizador"
+                height="50" width="50" />
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.UserID)
+                @(item.admin.Equals(true)?"Sim":"Não")
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |

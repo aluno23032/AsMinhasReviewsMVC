@@ -25,15 +25,15 @@ namespace SiteReviews.Data
                    NomeUtilizador= "josesilva",
                    Email = "josesilva5@gmail.com",
                    DataNascimento = new DateTime(2012, 12, 25),
-                   Fotografia = "Jose.png"
+                   Fotografia = "josesilva.jpg"
                },
                new Utilizadores()
                {
                    Id = 2,
-                   NomeUtilizador = "mariasantos",
-                   Email = "mariasantos1@gmail.com",
+                   NomeUtilizador = "joaotiago",
+                   Email = "joaotiago15@gmail.com",
                    DataNascimento = new DateTime(2004, 10, 12),
-                   Fotografia = "Maria.jpg"
+                   Fotografia = "joaotiago.jpg"
                },
                new Utilizadores()
                {
@@ -41,7 +41,7 @@ namespace SiteReviews.Data
                    NomeUtilizador = "ricardosousa",
                    Email = "ricardosousa8@gmail.com",
                    DataNascimento = new DateTime(2007, 1, 9),
-                   Fotografia = "Ricardo.jpg"
+                   Fotografia = "ricardosousa.jpg"
                }
             );
             modelBuilder.Entity<Series>().HasData(
@@ -55,7 +55,6 @@ namespace SiteReviews.Data
                new Reviews { Id = 1, DataCriacao = new DateTime(2022, 6, 26), Conteudo = "When you finish the show you'll never be the same..I guarantee you", 
                    Rating = 10, CriadorFK = 1, ObjetoFK = 1}
             );
-
         }
 
         public DbSet<SiteReviews.Models.Reviews> Reviews { get; set; }

@@ -12,7 +12,7 @@ using SiteReviews.Data;
 namespace SiteReviews.Migrations
 {
     [DbContext(typeof(SiteReviewsContext))]
-    [Migration("20220626002705_a")]
+    [Migration("20220629213000_a")]
     partial class a
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -173,7 +173,7 @@ namespace SiteReviews.Migrations
                             Id = 1,
                             DataNascimento = new DateTime(2012, 12, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "josesilva5@gmail.com",
-                            Fotografia = "Jose.png",
+                            Fotografia = "josesilva.jpg",
                             NomeUtilizador = "josesilva",
                             admin = false
                         },
@@ -181,9 +181,9 @@ namespace SiteReviews.Migrations
                         {
                             Id = 2,
                             DataNascimento = new DateTime(2004, 10, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "mariasantos1@gmail.com",
-                            Fotografia = "Maria.jpg",
-                            NomeUtilizador = "mariasantos",
+                            Email = "joaotiago15@gmail.com",
+                            Fotografia = "joaotiago.jpg",
+                            NomeUtilizador = "joaotiago",
                             admin = false
                         },
                         new
@@ -191,7 +191,7 @@ namespace SiteReviews.Migrations
                             Id = 3,
                             DataNascimento = new DateTime(2007, 1, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "ricardosousa8@gmail.com",
-                            Fotografia = "Ricardo.jpg",
+                            Fotografia = "ricardosousa.jpg",
                             NomeUtilizador = "ricardosousa",
                             admin = false
                         });
@@ -263,7 +263,7 @@ namespace SiteReviews.Migrations
 
             modelBuilder.Entity("SiteReviews.Models.Reviews", b =>
                 {
-                    b.HasOne("SiteReviews.Models.Utilizadores", "Utilizador")
+                    b.HasOne("SiteReviews.Models.Utilizadores", "Criador")
                         .WithMany("ListaReviews")
                         .HasForeignKey("CriadorFK")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -283,9 +283,9 @@ namespace SiteReviews.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Objeto");
+                    b.Navigation("Criador");
 
-                    b.Navigation("Utilizador");
+                    b.Navigation("Objeto");
                 });
 
             modelBuilder.Entity("SiteReviews.Models.Objetos", b =>

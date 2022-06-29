@@ -8,11 +8,12 @@ namespace SiteReviews.Models
         [Key]
         public int Id { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}",
-                     ApplyFormatInEditMode = true)]
+        [Display(Name = "Data de criação")]
+        //[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [DataType(DataType.Date)]
         public DateTime DataCriacao { get; set; }
 
+        [Display(Name = "Conteúdo")]
         [Required(ErrorMessage = "Escreva a sua review")]
         public string Conteudo { get; set; }
 
@@ -21,9 +22,9 @@ namespace SiteReviews.Models
         [Range(1, 10)]
         public int Rating { get; set; }
 
-        [ForeignKey(nameof(Utilizador))]
+        [ForeignKey(nameof(Criador))]
         public int CriadorFK { get; set; }
-        public Utilizadores Utilizador { get; set; }
+        public Utilizadores Criador { get; set; }
 
         [ForeignKey(nameof(Objeto))]
         public int ObjetoFK { get; set; }

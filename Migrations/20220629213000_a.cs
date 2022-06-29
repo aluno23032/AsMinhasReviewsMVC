@@ -122,9 +122,9 @@ namespace SiteReviews.Migrations
                 columns: new[] { "Id", "DataNascimento", "Email", "Fotografia", "NomeUtilizador", "UserID", "admin" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2012, 12, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), "josesilva5@gmail.com", "Jose.png", "josesilva", null, false },
-                    { 2, new DateTime(2004, 10, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), "mariasantos1@gmail.com", "Maria.jpg", "mariasantos", null, false },
-                    { 3, new DateTime(2007, 1, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), "ricardosousa8@gmail.com", "Ricardo.jpg", "ricardosousa", null, false }
+                    { 1, new DateTime(2012, 12, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), "josesilva5@gmail.com", "josesilva.jpg", "josesilva", null, false },
+                    { 2, new DateTime(2004, 10, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), "joaotiago15@gmail.com", "joaotiago.jpg", "joaotiago", null, false },
+                    { 3, new DateTime(2007, 1, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), "ricardosousa8@gmail.com", "ricardosousa.jpg", "ricardosousa", null, false }
                 });
 
             migrationBuilder.InsertData(

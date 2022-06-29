@@ -57,8 +57,8 @@ namespace SiteReviews.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,NomeUtilizador,Email,DataNascimento,Fotografia,UserID,admin")] Utilizadores utilizador, IFormFile fotoUser)
-        {                
+        public async Task<IActionResult> Create([Bind("Id,NomeUtilizador,Email,DataNascimento,Fotografia,UserID,admin")] Utilizadores utilizador,
+            IFormFile fotoUser) {                
                 if (fotoUser == null)
                 {
                     utilizador.Fotografia = "noUser.png";
@@ -71,10 +71,7 @@ namespace SiteReviews.Controllers
                         return View(utilizador);
                     }
                     else {
-                        Guid g = Guid.NewGuid();
-                        string nomeFoto = utilizador.NomeUtilizador + "_" + g.ToString();
-                        string extensaoFoto = Path.GetExtension(fotoUser.FileName).ToLower();
-                        nomeFoto += extensaoFoto;
+                        string nomeFoto = utilizador.NomeUtilizador + utilizador.Id + Path.GetExtension(fotoUser.FileName).ToLower();
                         utilizador.Fotografia = nomeFoto;
                 }
                 }
@@ -98,8 +95,7 @@ namespace SiteReviews.Controllers
                     {
                         Directory.CreateDirectory(nomeLocalizacaoFicheiro);
                     }
-                    string nomeDaFoto = Path.Combine(nomeLocalizacaoFicheiro, utilizador.Fotografia);
-                    using var stream = new FileStream(nomeDaFoto, FileMode.Create);
+                    using var stream = new FileStream(Path.Combine(nomeLocalizacaoFicheiro, utilizador.Fotografia), FileMode.Create);
                     await fotoUser.CopyToAsync(stream);
                 }
                 return RedirectToAction(nameof(Index));
@@ -128,11 +124,31 @@ namespace SiteReviews.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,NomeUtilizador,Email,DataNascimento,Fotografia,UserID")] Utilizadores utilizador, IFormFile fotoVet)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,NomeUtilizador,Email,DataNascimento,Fotografia,UserID")] Utilizadores utilizador, 
+            IFormFile fotoUser)
         {
             if (id != utilizador.Id)
             {
                 return NotFound();
+            }
+
+            if (fotoUser != null)
+            {
+                if (!(fotoUser.ContentType == "image/png" || fotoUser.ContentType == "image/jpeg"))
+                {
+                    ModelState.AddModelError("", "Por favor, adicione um ficheiro .png ou .jpg");
+                    return View(utilizador);
+                }
+                else
+                {
+                    string fullPath = "~/Fotos/" + utilizador.Fotografia;
+                    if (System.IO.File.Exists(fullPath))
+                    {
+                        System.IO.File.Delete(fullPath);
+                    }
+                    string nomeFoto = utilizador.NomeUtilizador + utilizador.Id + Path.GetExtension(fotoUser.FileName).ToLower();
+                    utilizador.Fotografia = nomeFoto;
+                }
             }
 
             if (ModelState.IsValid)
@@ -142,16 +158,20 @@ namespace SiteReviews.Controllers
                     _context.Update(utilizador);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException) {
+                    ModelState.AddModelError("", "Ocorreu um erro com a operação de guardar os dados do utilizador " + utilizador.NomeUtilizador);
+                    return View(utilizador);
+                }
+                if (fotoUser != null)
                 {
-                    if (!UtilizadoresExists(utilizador.Id))
+                    string nomeLocalizacaoFicheiro = _webHostEnvironment.WebRootPath;
+                    nomeLocalizacaoFicheiro = Path.Combine(nomeLocalizacaoFicheiro, "Fotos");
+                    if (!Directory.Exists(nomeLocalizacaoFicheiro))
                     {
-                        return NotFound();
+                        Directory.CreateDirectory(nomeLocalizacaoFicheiro);
                     }
-                    else
-                    {
-                        throw;
-                    }
+                    using var stream = new FileStream(Path.Combine(nomeLocalizacaoFicheiro, utilizador.Fotografia), FileMode.Create);
+                    await fotoUser.CopyToAsync(stream);
                 }
                 return RedirectToAction(nameof(Index));
             }

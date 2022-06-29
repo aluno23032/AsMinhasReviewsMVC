@@ -13,6 +13,8 @@
 *.png
 *.zip
 *.pdf
+/Models Data
+/Vets/Vets/wwwroot/Fotos
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
