@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace SiteReviews.Models
 {
+    /// <summary>
+    /// Representa os dados do utilizador
+    /// </summary>
     public class Utilizadores
     {
         public Utilizadores()
@@ -10,33 +11,30 @@ namespace SiteReviews.Models
             ListaReviews = new HashSet<Reviews>();
         }
 
+        /// <summary>
+        /// Chave primária para a tabela dos utilizadores
+        /// </summary>
         [Key]
         public int Id { get; set; }
 
-        [Display(Name = "Nome de Utilizador")]
+        /// <summary>
+        /// Nome do utilizador
+        /// </summary>
+        /// [Display(Name = "Nome do Utilizador")]
         [Required(ErrorMessage = "O nome de utilizador é de preenchimento obrigatório.")]
-        [StringLength(32, ErrorMessage = "O nome de utilizador não pode ter mais do que {1} caracteres.", MinimumLength = 8)]
-        [RegularExpression("[A-ZÂÓÍa-záéíóúàèìòùâêîôûãõäëïöüñç '-]+", ErrorMessage = "No nome de utilizador só são aceites letras.")]
-        public string NomeUtilizador { get; set; }
+        [StringLength(32, ErrorMessage = "O {0} deve ter, pelo menos, {2} e um máximo de {1} carateres.", MinimumLength = 8)]
 
-        [Required(ErrorMessage = "O {0} é de preenchimento obrigatório.")]
-        [StringLength(64, ErrorMessage = "O email não pode ter mais do que {1} caracteres.", MinimumLength = 8)]
-        [EmailAddress(ErrorMessage = "Só são aceites endereços de email válidos.")]
-        public string Email { get; set; }
+        public string Nome { get; set; }
 
-        [Display(Name = "Data de nascimento")]
-        [DataType(DataType.Date)]
-        [Required(ErrorMessage = "A data de nascimento é de preenchimento obrigatório.")]
-        public DateTime DataNascimento { get; set; }
-
-        public string Fotografia { get; set; }
-
-        [Display(Name = "Lista de Reviews")]
+        /// <summary>
+        /// Lista das reviews que o utilizador criou
+        /// </summary>
         public ICollection<Reviews> ListaReviews { get; set; }
 
-        public string UserID { get; set; }
 
-        [Display(Name = "Admin")]
-        public Boolean admin { get; set; } = false;
+        /// <summary>
+        /// Atributo para executar a chave forasteira que permite ligar a tabela da autenticação à tabela dos utilizadores
+        /// </summary>
+        public string UserID { get; set; }
     }
 }

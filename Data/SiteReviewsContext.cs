@@ -22,26 +22,17 @@ namespace SiteReviews.Data
                new Utilizadores()
                {
                    Id = 1,
-                   NomeUtilizador= "josesilva",
-                   Email = "josesilva5@gmail.com",
-                   DataNascimento = new DateTime(2012, 12, 25),
-                   Fotografia = "josesilva.jpg"
+                   Nome = "josesilva",
                },
                new Utilizadores()
                {
                    Id = 2,
-                   NomeUtilizador = "joaotiago",
-                   Email = "joaotiago15@gmail.com",
-                   DataNascimento = new DateTime(2004, 10, 12),
-                   Fotografia = "joaotiago.jpg"
+                   Nome  = "joaotiago",
                },
                new Utilizadores()
                {
                    Id = 3,
-                   NomeUtilizador = "ricardosousa",
-                   Email = "ricardosousa8@gmail.com",
-                   DataNascimento = new DateTime(2007, 1, 9),
-                   Fotografia = "ricardosousa.jpg"
+                   Nome = "ricardosousa",
                }
             );
             modelBuilder.Entity<Series>().HasData(
@@ -53,7 +44,7 @@ namespace SiteReviews.Data
 
             modelBuilder.Entity<Reviews>().HasData(
                new Reviews { Id = 1, DataCriacao = new DateTime(2022, 6, 26), Conteudo = "When you finish the show you'll never be the same..I guarantee you", 
-                   Rating = 10, CriadorFK = 1, ObjetoFK = 1}
+                   Rating = 10, CriadorFK = 1, JogoFK = 1}
             );
         }
 

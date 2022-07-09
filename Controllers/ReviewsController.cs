@@ -22,7 +22,7 @@ namespace SiteReviews.Controllers
         // GET: Reviews
         public async Task<IActionResult> Index()
         {
-            var siteReviewsContext = _context.Reviews.Include(r => r.Criador).Include(r => r.Objeto);
+            var siteReviewsContext = _context.Reviews.Include(r => r.Criador).Include(r => r.Jogo);
             return View(await siteReviewsContext.ToListAsync());
         }
 
@@ -36,7 +36,7 @@ namespace SiteReviews.Controllers
 
             var reviews = await _context.Reviews
                 .Include(r => r.Criador)
-                .Include(r => r.Objeto)
+                .Include(r => r.Jogo)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (reviews == null)
             {
@@ -68,7 +68,7 @@ namespace SiteReviews.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CriadorFK"] = new SelectList(_context.Utilizadores, "Id", "Email", reviews.CriadorFK);
-            ViewData["ObjetoFK"] = new SelectList(_context.Series, "Id", "Discriminator", reviews.ObjetoFK);
+            ViewData["ObjetoFK"] = new SelectList(_context.Series, "Id", "Discriminator", reviews.JogoFK);
             return View(reviews);
         }
 
@@ -86,7 +86,7 @@ namespace SiteReviews.Controllers
                 return NotFound();
             }
             ViewData["CriadorFK"] = new SelectList(_context.Utilizadores, "Id", "Email", reviews.CriadorFK);
-            ViewData["ObjetoFK"] = new SelectList(_context.Series, "Id", "Discriminator", reviews.ObjetoFK);
+            ViewData["ObjetoFK"] = new SelectList(_context.Series, "Id", "Discriminator", reviews.JogoFK);
             return View(reviews);
         }
 
@@ -123,7 +123,7 @@ namespace SiteReviews.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CriadorFK"] = new SelectList(_context.Utilizadores, "Id", "Email", reviews.CriadorFK);
-            ViewData["ObjetoFK"] = new SelectList(_context.Series, "Id", "Discriminator", reviews.ObjetoFK);
+            ViewData["ObjetoFK"] = new SelectList(_context.Series, "Id", "Discriminator", reviews.JogoFK);
             return View(reviews);
         }
 
@@ -137,7 +137,7 @@ namespace SiteReviews.Controllers
 
             var reviews = await _context.Reviews
                 .Include(r => r.Criador)
-                .Include(r => r.Objeto)
+                .Include(r => r.Jogo)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (reviews == null)
             {
