@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SiteReviews.Models
+namespace AsMinhasReviews.Models
 {
     public class Fotografias
     {

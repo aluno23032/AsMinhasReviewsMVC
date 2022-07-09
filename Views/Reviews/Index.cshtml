@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SiteReviews.Models.Reviews>
+﻿@model IEnumerable<AsMinhasReviews.Models.Reviews>
 
 @{
     ViewData["Title"] = "Index";
@@ -25,7 +25,7 @@
                 @Html.DisplayNameFor(model => model.Criador)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Objeto)
+                @Html.DisplayNameFor(model => model.Jogo)
             </th>
             <th></th>
         </tr>
@@ -43,10 +43,10 @@
                 @Html.DisplayFor(modelItem => item.Rating)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Criador.Email)
+                @Html.DisplayFor(modelItem => item.Criador.Nome)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Objeto.Discriminator)
+                @Html.DisplayFor(modelItem => item.Jogo.Nome)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

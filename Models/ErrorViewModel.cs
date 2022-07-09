@@ -1,4 +1,4 @@
-namespace SiteReviews.Models
+namespace AsMinhasReviews.Models
 {
     public class ErrorViewModel
     {

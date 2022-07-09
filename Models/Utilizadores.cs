@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-namespace SiteReviews.Models
+namespace AsMinhasReviews.Models
 {
     /// <summary>
     /// Representa os dados do utilizador

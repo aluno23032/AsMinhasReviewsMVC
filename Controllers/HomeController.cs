@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SiteReviews.Models;
+using AsMinhasReviews.Models;
 using System.Diagnostics;
 
-namespace SiteReviews.Controllers
+namespace AsMinhasReviews.Controllers
 {
     public class HomeController : Controller
     {
@@ -14,11 +14,6 @@ namespace SiteReviews.Controllers
         }
 
         public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult Privacy()
         {
             return View();
         }
