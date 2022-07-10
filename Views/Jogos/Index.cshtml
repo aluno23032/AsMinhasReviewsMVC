@@ -1,0 +1,45 @@
+﻿@model IEnumerable<AsMinhasReviews.Models.Jogos>
+@{
+    ViewData["Title"] = "Jogos";
+}
+<h1>Lista de jogos</h1>
+@if (User.IsInRole("Administrador"))
+{
+    <p>
+        <a asp-action="Create">Criar jogo</a>
+    </p>
+}
+<hr />
+<table class="table">
+    <tbody>
+        @{
+            int i = 0;
+        }
+        @foreach (var item in Model)
+        {
+            i = @i + 1;
+            <tr height="225px;">
+                <td style="padding-left:0px; padding-top: 0px;">
+                    <img src="~/Fotos/@Html.DisplayFor(modelItem => item.Capa)"
+                     alt="Foto de @item.Nome"
+                     title="@item.Nome"
+                     height="175px"
+                     />
+                </td>
+                <td>
+                    <div class="listarating" style="float: right">@Html.DisplayFor(modelItem => item.Rating) <img src="~/Fotos/estrela.png" height="22.5px" style="margin-bottom:7.5px;"/></div>
+                    <div><a class="listatitulo" asp-action="Details" asp-route-id="@item.Id">@i. @Html.DisplayFor(modelItem => item.Nome)</a></div>
+                    <div class="listainfo">Plataformas: @Html.DisplayFor(modelItem => item.Plataformas)<br>@item.DataLancamento.ToLongDateString()</div>
+                    <div class="listadesc">@Html.DisplayFor(modelItem => item.Descricao)</div>
+                </td>
+                @if (User.IsInRole("Administrador"))
+                {
+                    <td width="150px" style="text-align: center;">
+                        <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> | 
+                        <a asp-action="Delete" asp-route-id="@item.Id">Remover</a>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
