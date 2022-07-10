@@ -1,0 +1,88 @@
+﻿@model AsMinhasReviews.Models.Jogos
+@inject IWebHostEnvironment env
+@{
+    ViewData["Title"] = "Remover jogo";
+}
+@if (User.IsInRole("Administrador"))
+{
+<h1>Remover jogo</h1>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Nome)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Nome)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Capa)
+        </dt>
+        <dd class = "col-sm-10">
+            <img src="~/Fotos/@Html.DisplayFor(model => model.Capa)"
+                         alt="Foto de model.Nome"
+                         title="model.Nome"
+                         height="175px" />
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Plataformas)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Plataformas)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DataLancamento)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DataLancamento)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Descricao)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Descricao)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Rating)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Rating)
+        </dd>
+        <dt class = "col-sm-2">
+            Fotografias
+        </dt>
+        <dd class = "col-sm-10">
+            @{
+        int i = 0;
+        while(true){
+            i++;
+            var aux = Model.NomeFormatado + i + ".png";
+            if (System.IO.File.Exists(System.IO.Path.Combine(env.WebRootPath,"Fotos\\" + Model.NomeFormatado + i + ".png")))
+            {
+                aux = Model.NomeFormatado + i + ".png";
+                <img src="~/Fotos/@Html.DisplayFor(model => aux)" height="175px" />
+            }
+            else if (System.IO.File.Exists(System.IO.Path.Combine(env.WebRootPath,"Fotos\\" + Model.NomeFormatado + i + ".jpg")))
+            {
+                aux = Model.NomeFormatado + i + ".jpg";
+                <img src="~/Fotos/@Html.DisplayFor(model => aux)" height="175px" />
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Delete" class="btn btn-danger" />
+    </form>
+</div>
+}
+else
+{
+    <p>A remoção de jogos apenas é reservada aos administradores.</p>
+}

@@ -1,0 +1,69 @@
+﻿@model AsMinhasReviews.Models.Jogos
+@inject IWebHostEnvironment env
+@{
+    ViewData["Title"] = "Detalhes do jogo";
+}
+<div>
+    <table class="table">
+        <tbody>
+            <tr height="225px;">
+                <td style="padding-left:0px; padding-top: 0px;">
+                    <img src="~/Fotos/@Html.DisplayFor(model => model.Capa)"
+                         alt="Foto de model.Nome"
+                         title="model.Nome"
+                         height="175px" />
+                </td>
+                <td>
+                    <div class="listarating" style="float: right">@Html.DisplayFor(model => model.Rating) <img src="~/Fotos/estrela.png" height="22.5px" style="margin-bottom:7.5px;" /></div>
+                    <div class="listatitulo">@Html.DisplayFor(model => model.Nome)</div>
+                    @{var Datalanc = Model.DataLancamento.ToLongDateString();}
+                    <div class="listainfo">Plataformas: @Html.DisplayFor(model => model.Plataformas)<br>@Datalanc</div>
+                    <div class="listadesc">@Html.DisplayFor(model => model.Descricao)</div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <h3>Fotografias</h3>
+    @{
+        int i = 0;
+        while(true){
+            i++;
+            var aux = Model.NomeFormatado + i + ".png";
+            if (System.IO.File.Exists(System.IO.Path.Combine(env.WebRootPath,"Fotos\\" + Model.NomeFormatado + i + ".png")))
+            {
+                aux = Model.NomeFormatado + i + ".png";
+                        <img src="~/Fotos/@Html.DisplayFor(model => aux)" height="175px" />
+            }
+            else if (System.IO.File.Exists(System.IO.Path.Combine(env.WebRootPath,"Fotos\\" + Model.NomeFormatado + i + ".jpg")))
+            {
+                aux = Model.NomeFormatado + i + ".jpg";
+                        <img src="~/Fotos/@Html.DisplayFor(model => aux)" height="175px" />
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+    <hr />
+    <h3>Reviews</h3>
+    <table class="table">
+        @foreach (var review in Model.ListaReviews ?? Enumerable.Empty<Reviews>())
+        {
+            <tr>
+                <td style="padding-left:0px; padding-right:8px;">
+                    <div class="listarating" style="float: right">@review.Rating <img src="~/Fotos/estrela.png" height="22.5px" style="margin-bottom:7.5px;" /></div>
+                    <div class="listadesc"><a class="textoreview" asp-controller="Reviews" asp-action="Details" asp-route-id="@review.Id">@review.Conteudo</a></div>
+                    <div class="listainfo">@review.DataCriacao.ToLongDateString()</div>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+@if (User.IsInRole("Administrador"))
+{
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model?.Id">Editar</a> | 
+        <a asp-action="Delete" asp-route-id="@Model?.Id">Remover</a>
+    </div>
+}
