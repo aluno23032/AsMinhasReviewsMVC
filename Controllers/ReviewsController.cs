@@ -1,8 +1,4 @@
-﻿/*using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AsMinhasReviews.Data;
@@ -12,9 +8,12 @@ namespace AsMinhasReviews.Controllers
 {
     public class ReviewsController : Controller
     {
-        private readonly SiteReviewsContext _context;
+        /// <summary>
+        /// Manipula os dados da base de dados
+        /// </summary>
+        private readonly ApplicationDbContext _context;
 
-        public ReviewsController(SiteReviewsContext context)
+        public ReviewsController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -22,8 +21,8 @@ namespace AsMinhasReviews.Controllers
         // GET: Reviews
         public async Task<IActionResult> Index()
         {
-            var siteReviewsContext = _context.Reviews.Include(r => r.Criador).Include(r => r.Jogo);
-            return View(await siteReviewsContext.ToListAsync());
+            var applicationDbContext = _context.Reviews.Include(r => r.Criador).Include(r => r.Jogo);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Reviews/Details/5
@@ -33,7 +32,7 @@ namespace AsMinhasReviews.Controllers
             {
                 return NotFound();
             }
-
+            //Inclui informação sobre o criador da review e sobre o jogo para o qual a review é feita na vista detalhada dessa review
             var reviews = await _context.Reviews
                 .Include(r => r.Criador)
                 .Include(r => r.Jogo)
@@ -49,8 +48,8 @@ namespace AsMinhasReviews.Controllers
         // GET: Reviews/Create
         public IActionResult Create()
         {
-            ViewData["CriadorFK"] = new SelectList(_context.Utilizadores, "Id", "Email");
-            ViewData["ObjetoFK"] = new SelectList(_context.Series, "Id", "Discriminator");
+            //Mostra os jogos ordenados por nome na dropdown da vista de criação da review
+            ViewData["JogoFK"] = new SelectList(_context.Jogos, "Id", "Nome").OrderBy(c => c.Text);
             return View();
         }
 
@@ -59,19 +58,27 @@ namespace AsMinhasReviews.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,DataCriacao,Conteudo,Rating,CriadorFK,ObjetoFK")] Reviews reviews)
+        public async Task<IActionResult> Create([Bind("Id,DataCriacao,Conteudo,Rating,CriadorFK,JogoFK")] Reviews review)
         {
+            //Atribuir o id do criador e a data de criação da review à review em si
+            var utilizador = _context.Utilizadores.FirstOrDefault(u => u.Nome == User.Identity.Name);
+            review.CriadorFK = utilizador.Id;
+            review.DataCriacao = DateTime.Now;
             if (ModelState.IsValid)
             {
-                _context.Add(reviews);
+                _context.Add(review);
+                //Atualizar o rating do jogo tendo em conta a review criada pelo utilizador
+                var average = await _context.Reviews.Where(r => r.JogoFK == review.JogoFK).AverageAsync(r => r.Rating);
+                Jogos j = await _context.Jogos.FirstOrDefaultAsync(j => j.Id == review.JogoFK);
+                j.Rating = (decimal)average;
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                //Determinar a página para a qual o utilizador será redirecionado
+                var route = new RouteValueDictionary {
+                    { "id", review.Id } };
+                return RedirectToAction(nameof(Details), nameof(Reviews), route);
             }
-            ViewData["CriadorFK"] = new SelectList(_context.Utilizadores, "Id", "Email", reviews.CriadorFK);
-            ViewData["ObjetoFK"] = new SelectList(_context.Series, "Id", "Discriminator", reviews.JogoFK);
-            return View(reviews);
+            return View(review);
         }
-
         // GET: Reviews/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -86,7 +93,7 @@ namespace AsMinhasReviews.Controllers
                 return NotFound();
             }
             ViewData["CriadorFK"] = new SelectList(_context.Utilizadores, "Id", "Email", reviews.CriadorFK);
-            ViewData["ObjetoFK"] = new SelectList(_context.Series, "Id", "Discriminator", reviews.JogoFK);
+            ViewData["JogoFK"] = new SelectList(_context.Jogos, "Id", "Discriminator", reviews.JogoFK);
             return View(reviews);
         }
 
@@ -123,7 +130,7 @@ namespace AsMinhasReviews.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CriadorFK"] = new SelectList(_context.Utilizadores, "Id", "Email", reviews.CriadorFK);
-            ViewData["ObjetoFK"] = new SelectList(_context.Series, "Id", "Discriminator", reviews.JogoFK);
+            ViewData["JogoFK"] = new SelectList(_context.Jogos, "Id", "Discriminator", reviews.JogoFK);
             return View(reviews);
         }
 
@@ -172,4 +179,3 @@ namespace AsMinhasReviews.Controllers
         }
     }
 }
-*/
