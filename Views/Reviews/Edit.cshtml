@@ -1,12 +1,11 @@
 ﻿@model AsMinhasReviews.Models.Reviews
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar review";
 }
-
-<h1>Edit</h1>
-
-<h4>Reviews</h4>
+@if (User.IsInRole("Administrador") || User.Identity.Name == Model.Criador.Nome)
+{
+<h1>Editar review</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,13 +13,8 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="DataCriacao" class="control-label"></label>
-                <input asp-for="DataCriacao" class="form-control" />
-                <span asp-validation-for="DataCriacao" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Conteudo" class="control-label"></label>
-                <input asp-for="Conteudo" class="form-control" />
+                <textarea asp-for="Conteudo" class="form-control" rows="5"></textarea>
                 <span asp-validation-for="Conteudo" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -28,26 +22,28 @@
                 <input asp-for="Rating" class="form-control" />
                 <span asp-validation-for="Rating" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="CriadorFK" class="control-label"></label>
-                <select asp-for="CriadorFK" class="form-control" asp-items="ViewBag.CriadorFK"></select>
-                <span asp-validation-for="CriadorFK" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="JogoFK" class="control-label"></label>
-                <select asp-for="JogoFK" class="form-control" asp-items="ViewBag.ObjetoFK"></select>
+            <div style="visibility:hidden;height:0px;" class="form-group">
+                <label style="visibility:hidden;height:0px;" asp-for="JogoFK" class="control-label"></label>
+                <select style="visibility:hidden;height:0px;" asp-for="JogoFK" class="form-control" asp-items="ViewBag.JogoFK"></select>
                 <span asp-validation-for="JogoFK" class="text-danger"></span>
             </div>
+            <div style="visibility:hidden;height:0px;" class="form-group">
+                <label style="visibility:hidden;height:0px;" asp-for="CriadorFK" class="control-label"></label>
+                <select style="visibility:hidden;height:0px;" asp-for="CriadorFK" class="form-control" asp-items="ViewBag.CriadorFK"></select>
+                <span asp-validation-for="CriadorFK" class="text-danger"></span>
+            </div>
+            <br>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Guardar" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+}
+else
+{
+    <p>A remoção da review é reservada apenas ao seu criador.</p>
+}
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

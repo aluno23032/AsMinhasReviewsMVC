@@ -79,6 +79,7 @@ namespace AsMinhasReviews.Controllers
             }
             return View(review);
         }
+
         // GET: Reviews/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -86,14 +87,13 @@ namespace AsMinhasReviews.Controllers
             {
                 return NotFound();
             }
-
             var reviews = await _context.Reviews.FindAsync(id);
             if (reviews == null)
             {
                 return NotFound();
             }
-            ViewData["CriadorFK"] = new SelectList(_context.Utilizadores, "Id", "Email", reviews.CriadorFK);
-            ViewData["JogoFK"] = new SelectList(_context.Jogos, "Id", "Discriminator", reviews.JogoFK);
+            ViewData["CriadorFK"] = new SelectList(_context.Utilizadores, "Id", "Nome", reviews.CriadorFK);
+            ViewData["JogoFK"] = new SelectList(_context.Jogos, "Id", "Capa", reviews.JogoFK);
             return View(reviews);
         }
 
@@ -102,36 +102,28 @@ namespace AsMinhasReviews.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,DataCriacao,Conteudo,Rating,CriadorFK,ObjetoFK")] Reviews reviews)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,DataCriacao,Conteudo,Rating,CriadorFK,JogoFK")] Reviews review)
         {
-            if (id != reviews.Id)
+            //Determinar a página para a qual o utilizador será redirecionado
+            var route = new RouteValueDictionary {
+                    { "id", review.Id } };
+            if (id != review.Id)
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(reviews);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ReviewsExists(reviews.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(review);
+                _context.SaveChanges();
+                //Atualizar o rating do jogo tendo em conta a review criada pelo utilizador
+                var average = await _context.Reviews.Where(r => r.JogoFK == review.JogoFK).AverageAsync(r => r.Rating);
+                Jogos j = await _context.Jogos.FirstOrDefaultAsync(j => j.Id == review.JogoFK);
+                j.Rating = (decimal)average;
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Details), nameof(Reviews), route);
             }
-            ViewData["CriadorFK"] = new SelectList(_context.Utilizadores, "Id", "Email", reviews.CriadorFK);
-            ViewData["JogoFK"] = new SelectList(_context.Jogos, "Id", "Discriminator", reviews.JogoFK);
-            return View(reviews);
+            return View(review);
         }
 
         // GET: Reviews/Delete/5
@@ -141,7 +133,7 @@ namespace AsMinhasReviews.Controllers
             {
                 return NotFound();
             }
-
+            //Inclui informação sobre o criador da review e sobre o jogo para o qual a review é feita na vista detalhada dessa review
             var reviews = await _context.Reviews
                 .Include(r => r.Criador)
                 .Include(r => r.Jogo)
@@ -161,16 +153,23 @@ namespace AsMinhasReviews.Controllers
         {
             if (_context.Reviews == null)
             {
-                return Problem("Entity set 'SiteReviewsContext.Reviews'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.Reviews'  is null.");
             }
-            var reviews = await _context.Reviews.FindAsync(id);
-            if (reviews != null)
+            var review = await _context.Reviews.FindAsync(id);
+            //Determinar a página para a qual o utilizador será redirecionado
+            var route = new RouteValueDictionary {
+                { "id", review.JogoFK } };
+            if (review != null)
             {
-                _context.Reviews.Remove(reviews);
+                _context.Reviews.Remove(review);
+                _context.SaveChanges();
             }
-            
+            //Atualizar o rating do jogo tendo em conta a review criada pelo utilizador
+            var average = await _context.Reviews.Where(r => r.JogoFK == review.JogoFK).AverageAsync(r => r.Rating);
+            Jogos j = await _context.Jogos.FirstOrDefaultAsync(j => j.Id == review.JogoFK);
+            j.Rating = (decimal)average;
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Details), nameof(Jogos),route);
         }
 
         private bool ReviewsExists(int id)
