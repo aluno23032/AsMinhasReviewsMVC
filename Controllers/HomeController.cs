@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using AsMinhasReviews.Models;
 using System.Diagnostics;
-
 namespace AsMinhasReviews.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;

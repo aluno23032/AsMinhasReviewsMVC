@@ -3,16 +3,18 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - AsMinhasReviews</title>
+    <title>@ViewData["Title"] - As Minhas Reviews</title>
+    <link href="~/estrela.ico" rel="shortcut icon" type="image/x-icon" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/AsMinhasReviews.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3" style="color:white;">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Reviews</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">As Minhas Reviews <img src="~/Fotos/estrela.png" height="15px" style="margin-bottom:4px"/></a>
+                
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -20,22 +22,28 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Utilizadores" asp-action="Index">Utilizadores</a>
+                            <a class="nav-link text-dark" asp-controller="Jogos" asp-action="Index" asp-route-Id="Rating">Os melhores jogos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Jogos" asp-action="Index" asp-route-Id="Data">Os jogos mais recentes</a>
                         </li>
                     </ul>
+                    @*Coloca, na interface, os botões de 'register' e de 'login'  *@
+                     <partial name="_LoginPartial" />   
                 </div>
             </div>
         </nav>
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+            @*O código das views será introduzido aqui*@
             @RenderBody()
         </main>
     </div>
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2022 - Reviews
+            &copy; 2022 - AsMinhasReviews
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

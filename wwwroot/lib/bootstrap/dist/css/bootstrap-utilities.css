@@ -424,7 +424,7 @@
 }
 
 .border {
-  border: 1px solid #dee2e6 !important;
+    border: 1px solid #383d3f !important;
 }
 
 .border-0 {
@@ -432,7 +432,7 @@
 }
 
 .border-top {
-  border-top: 1px solid #dee2e6 !important;
+    border-top: 1px solid #383d3f !important;
 }
 
 .border-top-0 {
@@ -440,7 +440,7 @@
 }
 
 .border-end {
-  border-right: 1px solid #dee2e6 !important;
+    border-right: 1px solid #383d3f !important;
 }
 
 .border-end-0 {

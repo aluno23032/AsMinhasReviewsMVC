@@ -9,12 +9,7 @@
 *.user
 *.userosscache
 *.sln.docstates
-*.jpg
-*.png
-*.zip
-*.pdf
-/Models Data
-/Vets/Vets/wwwroot/Fotos
+Migrations/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -354,5 +349,4 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
-
-/wwwroot/Fotos
+/Vets/Vets/wwwroot/Fotos

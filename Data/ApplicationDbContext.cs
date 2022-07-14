@@ -131,30 +131,35 @@ namespace AsMinhasReviews.Data
                 {
                     Id = 1,
                     Nome = "admin123",
+                    DataNascimento = new DateTime(2012, 12, 25),
                     UserID = "1"
                 },
                 new Utilizadores()
                 {
                     Id = 2,
                     Nome = "josesilva",
+                    DataNascimento = new DateTime(2012, 12, 25),
                     UserID = "2"
                 },
                 new Utilizadores()
                 {
                     Id = 3,
                     Nome = "joaotiago",
+                    DataNascimento = new DateTime(2004, 10, 12),
                     UserID = "3"
                 },
                 new Utilizadores()
                 {
                     Id = 4,
                     Nome = "ricardosantos",
+                    DataNascimento = new DateTime(2007, 1, 9),
                     UserID = "4"
                 },
                 new Utilizadores()
                 {
                     Id = 5,
                     Nome = "utilizador123",
+                    DataNascimento = new DateTime(2006, 5, 12),
                     UserID = "5"
                 }
                );

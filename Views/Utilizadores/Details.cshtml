@@ -1,20 +1,23 @@
 ﻿@model AsMinhasReviews.Models.Utilizadores
 
 @{
-    ViewData["Title"] = "Detalhes do utilizador";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Reviews do utilizador";
 }
 
-<h1>Detalhes do utilizador</h1>
-
+<h1>Reviews do utilizador</h1>
+<a asp-controller="Reviews" asp-action="Create">Criar review</a>
 <div>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nome)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nome)
-        </dd>
-    </dl>
+    <table class="table">
+        @foreach (var review in Model.ListaReviews ?? Enumerable.Empty<Reviews>())
+        {
+            <tr>
+                <td style="padding-left:0px; padding-right:8px;">
+                    <div class="listarating" style="float: right">@review.Rating <img src="~/Fotos/estrela.png" height="22.5px" style="margin-bottom:7.5px;" /></div>
+                    <div class="listadesc"><a class="textoreview" asp-controller="Reviews" asp-action="Details" asp-route-id="@review.Id">@review.Conteudo</a></div>
+                    <div class="listainfo">@review.DataCriacao.ToLongDateString()</div>
+                </td>
+            </tr>
+        }
+    </table>
 </div>

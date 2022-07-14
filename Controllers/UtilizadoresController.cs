@@ -1,9 +1,4 @@
-﻿/*using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AsMinhasReviews.Data;
 using AsMinhasReviews.Models;
@@ -12,14 +7,14 @@ namespace AsMinhasReviews.Controllers
 {
     public class UtilizadoresController : Controller
     {
-        private readonly SiteReviewsContext _context;
+        /// <summary>
+        /// Manipula os dados da base de dados
+        /// </summary>
+        private readonly ApplicationDbContext _context;
 
-        private readonly IWebHostEnvironment _webHostEnvironment;
-
-        public UtilizadoresController(SiteReviewsContext context, IWebHostEnvironment webHostEnvironment)
+        public UtilizadoresController(ApplicationDbContext context)
         {
             _context = context;
-            _webHostEnvironment = webHostEnvironment;
         }
 
         // GET: Utilizadores
@@ -29,15 +24,18 @@ namespace AsMinhasReviews.Controllers
         }
 
         // GET: Utilizadores/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string? id)
         {
             if (id == null || _context.Utilizadores == null)
             {
                 return NotFound();
             }
-
+            //Inclui a lista de reviews referente ao jogo na vista detalhada desse mesmo jogo
             var utilizadores = await _context.Utilizadores
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .Include(u => u.ListaReviews)
+                .Where(u => u.Nome == id)
+                .FirstOrDefaultAsync(m => m.Nome == id);
+
             if (utilizadores == null)
             {
                 return NotFound();
@@ -57,23 +55,15 @@ namespace AsMinhasReviews.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,NomeUtilizador,Email,DataNascimento,Fotografia,UserID,admin")] Utilizadores utilizador) 
-        {                
+        public async Task<IActionResult> Create([Bind("Id,Nome,DataNascimento,UserID")] Utilizadores utilizadores)
+        {
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Add(utilizador);
-                    await _context.SaveChangesAsync();
-                }
-                catch (Exception)
-                {
-                    ModelState.AddModelError("", "Ocorreu um erro com a operação de guardar os dados do utilizador " + utilizador.Nome);
-                    return View(utilizador);
-                }
+                _context.Add(utilizadores);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(utilizador);
+            return View(utilizadores);
         }
 
         // GET: Utilizadores/Edit/5
@@ -97,9 +87,9 @@ namespace AsMinhasReviews.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,NomeUtilizador,Email,DataNascimento,Fotografia,UserID")] Utilizadores utilizador)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,DataNascimento,UserID")] Utilizadores utilizadores)
         {
-            if (id != utilizador.Id)
+            if (id != utilizadores.Id)
             {
                 return NotFound();
             }
@@ -108,16 +98,23 @@ namespace AsMinhasReviews.Controllers
             {
                 try
                 {
-                    _context.Update(utilizador);
+                    _context.Update(utilizadores);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException) {
-                    ModelState.AddModelError("", "Ocorreu um erro com a operação de guardar os dados do utilizador " + utilizador.Nome);
-                    return View(utilizador);
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!UtilizadoresExists(utilizadores.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(utilizador);
+            return View(utilizadores);
         }
 
         // GET: Utilizadores/Delete/5
@@ -143,15 +140,17 @@ namespace AsMinhasReviews.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            try
+            if (_context.Utilizadores == null)
             {
-                var utilizador = await _context.Utilizadores.FindAsync(id);
-                _context.Utilizadores.Remove(utilizador);
-                await _context.SaveChangesAsync();
+                return Problem("Entity set 'ApplicationDbContext.Utilizadores'  is null.");
             }
-            catch (Exception)
+            var utilizadores = await _context.Utilizadores.FindAsync(id);
+            if (utilizadores != null)
             {
+                _context.Utilizadores.Remove(utilizadores);
             }
+            
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
@@ -161,4 +160,3 @@ namespace AsMinhasReviews.Controllers
         }
     }
 }
-*/
