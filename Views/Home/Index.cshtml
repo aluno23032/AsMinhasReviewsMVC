@@ -1,11 +1,20 @@
 ﻿@{
     ViewData["Title"] = "Página principal";
 }
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
 
 <div style="vertical-align:middle; margin-top:300px;" class="text-center">
     <h1 class="display-4">Bem-vindo</h1>
     <div>
         <a style="margin-right:10px;" asp-controller="Jogos" asp-action="Index" asp-route-Id="Rating">Lista dos melhores jogos</a>
-        <a asp-controller="Reviews" asp-action="Create">Criar uma review</a>
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <a asp-controller="Reviews" asp-action="Create">Criar uma review</a>
+        }
+        else
+        {
+            <a asp-area="Identity" asp-page="/Account/Login">Criar uma review</a>
+        }
     </div>
 </div>

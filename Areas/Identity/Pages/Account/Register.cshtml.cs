@@ -62,13 +62,6 @@ namespace AsMinhasReviews.Areas.Identity.Pages.Account
         public class InputModel
         {
             /// <summary>
-            /// Nome do utilizador
-            /// </summary>
-            [Required]
-            [Display(Name = "Nome de utilizador")]
-            public string UserName { get; set; }
-
-            /// <summary>
             /// Email do utilizador
             /// </summary>
             [Required]
@@ -115,7 +108,7 @@ namespace AsMinhasReviews.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
-                await _userStore.SetUserNameAsync(user, Input.UserName, CancellationToken.None);
+                await _userStore.SetUserNameAsync(user, Input.Utilizador.Nome, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 user.EmailConfirmed = true;
                 user.LockoutEnabled = true;
@@ -127,19 +120,18 @@ namespace AsMinhasReviews.Areas.Identity.Pages.Account
                     //Associar o utilizador à role 'Utilizador'
                     await _userManager.AddToRoleAsync(user, "Utilizador");
                     //Guardar os dados do novo utilizador
-                    Input.Utilizador.UserID = user.Id;
-                    Input.Utilizador.Nome = Input.UserName; 
+                    Input.Utilizador.UserID = user.Id; 
                     try
                     {
                         _context.Add(Input.Utilizador);
                         await _context.SaveChangesAsync();
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         //Se ocorrer algum erro, apagar o utilizador já criado
                         await _userManager.DeleteAsync(user);
                         //Mensagem de erro a ser enviada ao utilizador
-                        ModelState.AddModelError("", "Ocorreu um erro com a criação do Utilizador");
+                        ModelState.AddModelError("", ex.InnerException.Message);
                         //Devolver o controlo da app ao utilizador
                         return Page();
                     }
