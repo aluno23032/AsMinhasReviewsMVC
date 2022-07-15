@@ -25,15 +25,6 @@ namespace AsMinhasReviews.Models
         [StringLength(32, ErrorMessage = "O {0} deve ter, pelo menos, {2} e um máximo de {1} carateres.", MinimumLength = 8)]
 
         public string Nome { get; set; }
-        
-        /// <summary>
-        /// Data de nascimento do utilizador
-        /// </summary>
-        [Display(Name = "Data de nascimento")]
-        [DataType(DataType.Date)]
-        [Required(ErrorMessage = "A data de nascimento é de preenchimento obrigatório.")]
-        public DateTime DataNascimento { get; set; }
-
 
         /// <summary>
         /// Lista das reviews que o utilizador criou
