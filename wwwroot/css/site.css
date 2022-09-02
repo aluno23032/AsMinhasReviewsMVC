@@ -63,3 +63,16 @@ td {
     font-weight: 600;
     text-decoration: none;
 }
+
+.nav-pills .nav-link {
+    background: none;
+    border: 0;
+    border-radius: 0.25rem;
+    color: #feab32;
+}
+
+    .nav-pills .nav-link.active,
+    .nav-pills .show > .nav-link {
+        color: #fff;
+        background-color: #feab32;
+    }
