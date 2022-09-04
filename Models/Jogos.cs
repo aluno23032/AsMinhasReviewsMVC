@@ -56,7 +56,7 @@ namespace AsMinhasReviews.Models
         /// <summary>
         /// Rating do jogo
         /// </summary>
-        [DisplayFormat(DataFormatString = "{0:0.00}")]  
+        [DisplayFormat(DataFormatString = "{0:0.0}")]  
         public decimal Rating { get; set; }
 
         /// <summary>
