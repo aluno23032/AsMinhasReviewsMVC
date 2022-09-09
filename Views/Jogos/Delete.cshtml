@@ -65,7 +65,7 @@
             else if (System.IO.File.Exists(System.IO.Path.Combine(env.WebRootPath,"Fotos\\" + Model.NomeFormatado + i + ".jpg")))
             {
                 aux = Model.NomeFormatado + i + ".jpg";
-                <img src="~/Fotos/@Html.DisplayFor(model => aux)" height="175px" />
+                <img style="margin-bottom:10px" src="~/Fotos/@Html.DisplayFor(model => aux)" height="175px" />
             }
             else
             {
@@ -78,7 +78,7 @@
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" />
+        <input type="submit" value="Remover" class="btn btn-danger" />
     </form>
 </div>
 }
