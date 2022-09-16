@@ -5,6 +5,7 @@
 }
 
 <h1>Reviews de @Model.Nome</h1>
+<a asp-controller="Reviews" asp-action="Create">Criar uma review</a>
 <div>
     <hr />
     <table class="table">
@@ -16,6 +17,13 @@
                     <div class="listadesc"><a class="textoreview" asp-controller="Reviews" asp-action="Details" asp-route-id="@review.Id">@review.Conteudo</a></div>
                     <div class="listainfo">@review.DataCriacao.ToLongDateString()</div>
                 </td>
+                @if (User.IsInRole("Administrador") || User.Identity.Name == review.Criador.Nome)
+                {
+                    <td width="150px" style="text-align: center;">
+                        <a asp-controller="Reviews" asp-action="Edit" asp-route-id="@review.Id">Editar</a> | 
+                        <a asp-controller="Reviews" asp-action="Delete" asp-route-id="@review.Id">Remover</a>
+                    </td>
+                }
             </tr>
         }
     </table>
