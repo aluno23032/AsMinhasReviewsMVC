@@ -7,7 +7,8 @@
 <div style="vertical-align:middle; margin-top:300px;" class="text-center">
     <h1 class="display-4">Bem-vindo</h1>
     <div>
-        <a style="margin-right:10px;" asp-controller="Jogos" asp-action="Index" asp-route-Id="Rating">Lista dos melhores jogos</a>
+        <a asp-controller="Jogos" asp-action="Index" asp-route-Id="Rating">Lista dos melhores jogos</a>
+        <span> | </span>
         @if (SignInManager.IsSignedIn(User))
         {
             <a asp-controller="Reviews" asp-action="Create">Criar uma review</a>
@@ -16,5 +17,7 @@
         {
             <a asp-area="Identity" asp-page="/Account/Login">Criar uma review</a>
         }
+        <span> | </span>
+        <a asp-controller="Detalhes">Detalhes da aplicação</a>
     </div>
 </div>
