@@ -9,7 +9,7 @@
                     <div class="listarating" style="float: right">@Html.DisplayFor(model => model.Rating) <img src="~/Fotos/estrela.png" height="22.5px" style="margin-bottom:7.5px;" /></div>
                     @{var linkJogo = Model.Jogo.Id;}
                     <div class="listainfo"><a class="listatitulo" style="font-size:20px;" asp-controller="Jogos" asp-action="Details" asp-route-id=@linkJogo>@Html.DisplayFor(model => model.Jogo.Nome)</a></div>
-                    @{var linkCriador = Model.Criador.Id;}
+                    @{var linkCriador = Model.Criador.Nome;}
                     <div class="listainfo"><a class="listatitulo" style="font-size:15px;" asp-controller="Utilizadores" asp-action="Details" asp-route-id=@linkCriador>@Html.DisplayFor(model => model.Criador.Nome)</a></div>
                     <div class="listadesc">@Html.DisplayFor(model => model.Conteudo)</div>
                     @{var Datalanc = Model.DataCriacao.ToLongDateString();}
