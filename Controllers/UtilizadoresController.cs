@@ -33,6 +33,7 @@ namespace AsMinhasReviews.Controllers
             //Inclui a lista de reviews referente ao jogo na vista detalhada desse mesmo jogo
             var utilizadores = await _context.Utilizadores
                 .Include(u => u.ListaReviews)
+                    .ThenInclude(r => r.Jogo)
                 .Where(u => u.Nome == id)
                 .FirstOrDefaultAsync(m => m.Nome == id);
 

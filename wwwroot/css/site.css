@@ -64,6 +64,11 @@ td {
     text-decoration: none;
 }
 
+.textouser {
+    color: black;
+    text-decoration: none;
+}
+
 .nav-pills .nav-link {
     background: none;
     border: 0;

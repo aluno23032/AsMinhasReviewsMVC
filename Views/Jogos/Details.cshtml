@@ -15,7 +15,6 @@
                 </td>
                 <td>
                     <div class="listarating" style="float: right">@Html.DisplayFor(model => model.Rating) <img src="~/Fotos/estrela.png" height="22.5px" style="margin-bottom:7.5px;" /></div>
-                    <div class="listatitulo">@Html.DisplayFor(model => model.Nome)</div>
                     @{var Datalanc = Model.DataLancamento.ToLongDateString();}
                     <div class="listainfo">Plataformas: @Html.DisplayFor(model => model.Plataformas)<br>@Datalanc</div>
                     <div class="listadesc">@Html.DisplayFor(model => model.Descricao)</div>
@@ -53,6 +52,7 @@
             <tr>
                 <td style="padding-left:0px; padding-right:8px;">
                     <div class="listarating" style="float: right">@review.Rating <img src="~/Fotos/estrela.png" height="22.5px" style="margin-bottom:7.5px;" /></div>
+                    <div class="listainfo"><a class="textouser" asp-controller="Utilizadores" asp-action="Details" asp-route-id="@review.Criador.Nome">@review.Criador.Nome</a></div>
                     <div class="listadesc"><a class="textoreview" asp-controller="Reviews" asp-action="Details" asp-route-id="@review.Id">@review.Conteudo</a></div>
                     <div class="listainfo">@review.DataCriacao.ToLongDateString()</div>
                 </td>
